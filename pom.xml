@@ -20,6 +20,7 @@
     </properties>
 
     <dependencies>
+        <!-- Junit 5 dependency -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
