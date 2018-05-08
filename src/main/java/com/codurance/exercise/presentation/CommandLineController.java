@@ -5,7 +5,6 @@ import com.codurance.exercise.application.SocialNetworkImpl;
 import com.codurance.exercise.wrapper.ContentWrapper;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
 /**

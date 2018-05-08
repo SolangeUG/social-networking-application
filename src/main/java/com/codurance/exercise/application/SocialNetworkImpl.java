@@ -4,7 +4,6 @@ import com.codurance.exercise.wrapper.ContentWrapper;
 import com.codurance.exercise.wrapper.SubscriptionWrapper;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
 /**
