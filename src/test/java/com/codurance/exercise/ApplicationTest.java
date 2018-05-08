@@ -8,13 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Console-based social networking application unit tests
  * @author Solange U. Gasengayire
  */
-public class ApplicationTest {
+class ApplicationTest {
 
     /**
      * Starter Test :-)
      */
     @Test
-    public void shouldAnswerWithTrue() {
+    void shouldAnswerWithTrue() {
         assertTrue( true );
     }
 }
