@@ -2,9 +2,11 @@ package com.codurance.exercise.presentation;
 
 import com.codurance.exercise.application.SocialNetwork;
 import com.codurance.exercise.application.SocialNetworkImpl;
+import com.codurance.exercise.wrapper.ContentWrapper;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Command-Line Controller
@@ -42,21 +44,21 @@ public class CommandLineController {
     }
 
     /**
-     * Return a list of a given user content
+     * Return a map of a given user content
      * @param user specified user name
      * @return all created content by the user
      */
-    public List<String> getUserMessages(String user) {
+    public Map<LocalDate, ContentWrapper> getUserMessages(String user) {
         throw new RuntimeException("Not yet implemented");
     }
 
     /**
-     * Return a list of a given user content
+     * Return a map of a given user content
      * and content from the users they follow
      * @param user specified user
      * @return all content from the user and the users they follow
      */
-    public List<String> getAllMessages(String user) {
+    public Map<LocalDate, ContentWrapper> getAllMessages(String user) {
         throw new RuntimeException("Not yet implemented");
     }
 

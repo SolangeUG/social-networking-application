@@ -3,7 +3,8 @@ package com.codurance.exercise.application;
 import com.codurance.exercise.wrapper.ContentWrapper;
 import com.codurance.exercise.wrapper.SubscriptionWrapper;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * API methods definition.
@@ -28,13 +29,13 @@ public interface SocialNetwork {
      * @param user specified user name
      * @return the request list of content
      */
-    List<ContentWrapper> getContent(String user);
+    Map<LocalDate, ContentWrapper> getContent(String user);
 
     /**
-     * Get an aggregated list of content from a given user
+     * Get an aggregated map of content from a given user
      * and the users they are following (they subscribed to)
      * @param user the specified user name
-     * @return the request list of aggregated content
+     * @return the request map of aggregated content
      */
-    List<ContentWrapper> getAllContent(String user);
+    Map<LocalDate, ContentWrapper> getAllContent(String user);
 }

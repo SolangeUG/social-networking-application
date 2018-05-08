@@ -3,7 +3,9 @@ package com.codurance.exercise.application;
 import com.codurance.exercise.wrapper.ContentWrapper;
 import com.codurance.exercise.wrapper.SubscriptionWrapper;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Social network API methods implementation.
@@ -38,19 +40,19 @@ public class SocialNetworkImpl implements SocialNetwork {
      * @return the request list of content
      */
     @Override
-    public List<ContentWrapper> getContent(String user) {
+    public Map<LocalDate, ContentWrapper> getContent(String user) {
         throw new RuntimeException("Not yet implemented");
     }
 
     /**
-     * Get an aggregated list of content from a given user
+     * Get an aggregated map of content from a given user
      * and the users they are following (they subscribed to)
      *
      * @param user the specified user name
-     * @return the request list of aggregated content
+     * @return the request map of aggregated content
      */
     @Override
-    public List<ContentWrapper> getAllContent(String user) {
+    public Map<LocalDate, ContentWrapper> getAllContent(String user) {
         throw new RuntimeException("Not yet implemented");
     }
 }
