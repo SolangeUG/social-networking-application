@@ -98,7 +98,7 @@ public class ContentWrapper {
      * Return a string representation of this wrapper's content
      * @return wrapper content with duration
      */
-    String getFormattedContent() {
+    public String getFormattedContent() {
         return content + " " + formatDuration();
     }
 
