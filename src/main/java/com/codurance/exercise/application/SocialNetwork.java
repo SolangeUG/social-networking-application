@@ -3,7 +3,7 @@ package com.codurance.exercise.application;
 import com.codurance.exercise.wrapper.ContentWrapper;
 import com.codurance.exercise.wrapper.SubscriptionWrapper;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -29,7 +29,7 @@ public interface SocialNetwork {
      * @param user specified user name
      * @return the request list of content
      */
-    Map<LocalDate, ContentWrapper> getContent(String user);
+    Map<LocalDateTime, ContentWrapper> getContent(String user);
 
     /**
      * Get an aggregated map of content from a given user
@@ -37,5 +37,5 @@ public interface SocialNetwork {
      * @param user the specified user name
      * @return the request map of aggregated content
      */
-    Map<LocalDate, ContentWrapper> getAllContent(String user);
+    Map<LocalDateTime, ContentWrapper> getAllContent(String user);
 }

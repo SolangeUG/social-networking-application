@@ -4,7 +4,7 @@ import com.codurance.exercise.application.SocialNetwork;
 import com.codurance.exercise.application.SocialNetworkImpl;
 import com.codurance.exercise.wrapper.ContentWrapper;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -28,7 +28,7 @@ public class CommandLineController {
      * @param message the message to be posted
      * @param timestamp when the message is posted
      */
-    public void postMessage(String username, String message, LocalDate timestamp) {
+    public void postMessage(String username, String message, LocalDateTime timestamp) {
         throw new RuntimeException("Not yet implemented");
     }
 
@@ -38,7 +38,7 @@ public class CommandLineController {
      * @param subject user to follow
      * @param since when the subscription is started
      */
-    public void addFollowing(String username, String subject, LocalDate since) {
+    public void addFollowing(String username, String subject, LocalDateTime since) {
         throw new RuntimeException("Not yet implemented");
     }
 
@@ -47,7 +47,7 @@ public class CommandLineController {
      * @param user specified user name
      * @return all created content by the user
      */
-    public Map<LocalDate, ContentWrapper> getUserMessages(String user) {
+    public Map<LocalDateTime, ContentWrapper> getUserMessages(String user) {
         throw new RuntimeException("Not yet implemented");
     }
 
@@ -57,7 +57,7 @@ public class CommandLineController {
      * @param user specified user
      * @return all content from the user and the users they follow
      */
-    public Map<LocalDate, ContentWrapper> getAllMessages(String user) {
+    public Map<LocalDateTime, ContentWrapper> getAllMessages(String user) {
         throw new RuntimeException("Not yet implemented");
     }
 

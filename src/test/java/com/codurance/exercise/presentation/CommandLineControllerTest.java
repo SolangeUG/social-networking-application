@@ -3,13 +3,11 @@ package com.codurance.exercise.presentation;
 import com.codurance.exercise.wrapper.ContentWrapper;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Command-Line Controller unit tests
@@ -24,7 +22,7 @@ class CommandLineControllerTest {
     void shouldReturnUserFirstMessage() {
         postAliceMessages();
 
-        Map<LocalDate, ContentWrapper> messages = controller.getUserMessages("Alice");
+        Map<LocalDateTime, ContentWrapper> messages = controller.getUserMessages("Alice");
         Object[] messagesArray = messages.values().toArray();
 
         assertNotNull(messages);
@@ -39,7 +37,7 @@ class CommandLineControllerTest {
     void shouldReturnedListOfMessages() {
         postBobMessages();
 
-        Map<LocalDate, ContentWrapper> messages = controller.getUserMessages("Bob");
+        Map<LocalDateTime, ContentWrapper> messages = controller.getUserMessages("Bob");
         Object[] messagesArray = messages.values().toArray();
 
         assertNotNull(messages);
@@ -53,8 +51,8 @@ class CommandLineControllerTest {
     void shouldReturnAggregatedListOfMessages() {
         postCharlieMessages();
 
-        controller.addFollowing("Charlie", "Alice", LocalDate.now());
-        Map<LocalDate, ContentWrapper> aggregatedMessages = controller.getAllMessages("Charlie");
+        controller.addFollowing("Charlie", "Alice", LocalDateTime.now());
+        Map<LocalDateTime, ContentWrapper> aggregatedMessages = controller.getAllMessages("Charlie");
         Object[] wall = aggregatedMessages.values().toArray();
 
         assertNotNull(aggregatedMessages);
@@ -62,7 +60,7 @@ class CommandLineControllerTest {
         assertTrue(((String) wall[0]).contains("Charlie"));
         assertTrue(((String) wall[1]).contains("Alice"));
 
-        controller.addFollowing("Charlie", "Bob", LocalDate.now());
+        controller.addFollowing("Charlie", "Bob", LocalDateTime.now());
         aggregatedMessages = controller.getAllMessages("Charlie");
         wall = aggregatedMessages.values().toArray();
 
@@ -78,7 +76,7 @@ class CommandLineControllerTest {
      */
     private void postAliceMessages() {
         String user = "Alice";
-        LocalDate timestamp = LocalDate.now().minus(5, ChronoUnit.MINUTES);
+        LocalDateTime timestamp = LocalDateTime.now().minus(5, ChronoUnit.MINUTES);
         String message = "I love the weather today";
         controller.postMessage(user, message, timestamp);
     }
@@ -88,8 +86,8 @@ class CommandLineControllerTest {
      */
     private void postBobMessages() {
         String user = "Bob";
-        LocalDate now = LocalDate.now();
-        LocalDate timestamp = now.minus(2, ChronoUnit.MINUTES);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime timestamp = now.minus(2, ChronoUnit.MINUTES);
         String message = "Damn! We Lost!";
         controller.postMessage(user, message, timestamp);
 
@@ -103,8 +101,8 @@ class CommandLineControllerTest {
      */
     private void postCharlieMessages() {
         String user = "Charlie";
-        LocalDate now = LocalDate.now();
-        LocalDate timestamp = now.minus(2, ChronoUnit.SECONDS);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime timestamp = now.minus(2, ChronoUnit.SECONDS);
         String message = "I'm in New York today! Anyone want to have a coffee?";
         controller.postMessage(user, message, timestamp);
     }

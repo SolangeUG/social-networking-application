@@ -1,6 +1,6 @@
 package com.codurance.exercise.wrapper;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * A wrapper class to hold subscription information.
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class SubscriptionWrapper {
     private final String subscriptionOwner;
     private final String subscriptionSubject;
-    private final LocalDate subscriptionDate;
+    private final LocalDateTime subscriptionTimestamp;
 
     /**
      * Constructor
@@ -17,10 +17,10 @@ public class SubscriptionWrapper {
      * @param subject subscription subject
      * @param since subscription start date
      */
-    public SubscriptionWrapper(String owner, String subject, LocalDate since) {
+    public SubscriptionWrapper(String owner, String subject, LocalDateTime since) {
         this.subscriptionOwner = owner;
         this.subscriptionSubject = subject;
-        this.subscriptionDate = since;
+        this.subscriptionTimestamp = since;
     }
 
     /**
@@ -43,7 +43,7 @@ public class SubscriptionWrapper {
      * Return the start date of this subscription
      * @return subscription start date
      */
-    public LocalDate getSubscriptionDate() {
-        return subscriptionDate;
+    public LocalDateTime getSubscriptionTimestamp() {
+        return subscriptionTimestamp;
     }
 }

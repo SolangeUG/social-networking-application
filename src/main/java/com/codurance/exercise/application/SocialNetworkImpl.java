@@ -4,6 +4,7 @@ import com.codurance.exercise.wrapper.ContentWrapper;
 import com.codurance.exercise.wrapper.SubscriptionWrapper;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -39,7 +40,7 @@ public class SocialNetworkImpl implements SocialNetwork {
      * @return the request list of content
      */
     @Override
-    public Map<LocalDate, ContentWrapper> getContent(String user) {
+    public Map<LocalDateTime, ContentWrapper> getContent(String user) {
         throw new RuntimeException("Not yet implemented");
     }
 
@@ -51,7 +52,7 @@ public class SocialNetworkImpl implements SocialNetwork {
      * @return the request map of aggregated content
      */
     @Override
-    public Map<LocalDate, ContentWrapper> getAllContent(String user) {
+    public Map<LocalDateTime, ContentWrapper> getAllContent(String user) {
         throw new RuntimeException("Not yet implemented");
     }
 }

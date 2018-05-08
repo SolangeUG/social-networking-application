@@ -2,6 +2,7 @@ package com.codurance.exercise.wrapper;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -12,7 +13,7 @@ import java.util.ResourceBundle;
 public class ContentWrapper {
     private final String owner;
     private final String content;
-    private final LocalDate creationDate;
+    private final LocalDateTime creationTimestamp;
     private ResourceBundle messageBundle;
 
     /**
@@ -21,10 +22,10 @@ public class ContentWrapper {
      * @param message actual content
      * @param timestamp content creation timestamp
      */
-    public ContentWrapper(String owner, String message, LocalDate timestamp) {
+    public ContentWrapper(String owner, String message, LocalDateTime timestamp) {
         this.owner = owner;
         this.content = message;
-        this.creationDate = timestamp;
+        this.creationTimestamp = timestamp;
 
         this.messageBundle = ResourceBundle.getBundle("messages", Locale.getDefault());
     }
@@ -49,8 +50,8 @@ public class ContentWrapper {
      * Get the date on which the content was created
      * @return content creation date
      */
-    public LocalDate getCreationDate() {
-        return this.creationDate;
+    public LocalDateTime getCreationTimestamp() {
+        return this.creationTimestamp;
     }
 
     /**
@@ -94,7 +95,7 @@ public class ContentWrapper {
      * @return time difference as string
      */
     private String formatDuration() {
-        Duration timeDiff = Duration.between(LocalDate.now(), creationDate);
+        Duration timeDiff = Duration.between(LocalDateTime.now(), creationTimestamp);
         String result;
 
         long duration = timeDiff.toDays();
