@@ -7,7 +7,7 @@ Implementation of a console-based social networking application (similar to Twit
 
 - **Posting : Alice can publish messages to a personal timeline**
 
-````shell
+````
 > Alice -> I love the weather today
 > Bob -> Damn! We lost!
 > Bob -> Good game though.
@@ -16,7 +16,7 @@ Implementation of a console-based social networking application (similar to Twit
 
 - **Reading : I can view Alice and Bob's timelines**
 
-````shell
+````
 > Alice
 I love the weather today (5 minutes ago)
 > Bob
@@ -27,7 +27,7 @@ Damn! We lost! (2 minutes ago)
 
 - **Following : Charlie can subscribe to Alice's and Bob's timelines, and view an aggregated list of all subscriptions**
 
-````shell
+````
 > Charlie -> I'm in New York today! Anyone want to have a coffee?
 > Charlie follows Alice
 > Charlie wall
@@ -37,8 +37,8 @@ Alice - I love the weather today (5 minutes ago)
 > Charlie follows Bob
 > Charlie wall
 Charlie - I'm in New York today! Anyone want to have a coffee? (15 seconds ago)
-Bob -> Good game though. (1 minute ago)
-Bob -> Damn! We lost! (2 minutes ago)
+Bob - Good game though. (1 minute ago)
+Bob - Damn! We lost! (2 minutes ago)
 Alice - I love the weather today (5 minutes ago)
 
 ````
