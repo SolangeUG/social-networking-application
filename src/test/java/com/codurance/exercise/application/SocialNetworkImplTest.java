@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -96,7 +95,7 @@ class SocialNetworkImplTest {
         ContentWrapper content = new ContentWrapper(
                 "Alice",
                 "I love the weather today",
-                LocalDateTime.now().minus(10, ChronoUnit.MINUTES)
+                LocalDateTime.now().minusMinutes(10)
         );
         network.createContent(content);
     }
@@ -108,14 +107,14 @@ class SocialNetworkImplTest {
         ContentWrapper content = new ContentWrapper(
                 "Bob",
                 "Damn! We lost!",
-                LocalDateTime.now().minus(8, ChronoUnit.MINUTES)
+                LocalDateTime.now().minusMinutes(8)
         );
         network.createContent(content);
 
         content = new ContentWrapper(
                 "Bob",
                 "Good game though.",
-                LocalDateTime.now().minus(6, ChronoUnit.MINUTES)
+                LocalDateTime.now().minusMinutes(6)
         );
         network.createContent(content);
     }
@@ -127,7 +126,7 @@ class SocialNetworkImplTest {
         ContentWrapper content = new ContentWrapper(
                 "Charlie",
                 "I'm in New York today! Anyone want to have a coffee?",
-                LocalDateTime.now().minus(4, ChronoUnit.MINUTES)
+                LocalDateTime.now().minusMinutes(4)
         );
         network.createContent(content);
     }
@@ -139,7 +138,7 @@ class SocialNetworkImplTest {
         SubscriptionWrapper subscription = new SubscriptionWrapper(
                 "Charlie",
                 "Alice",
-                LocalDateTime.now().minus(2, ChronoUnit.MINUTES)
+                LocalDateTime.now().minusMinutes(2)
         );
         network.createSubscription(subscription);
     }
@@ -151,7 +150,7 @@ class SocialNetworkImplTest {
         SubscriptionWrapper subscription = new SubscriptionWrapper(
                 "Charlie",
                 "Bob",
-                LocalDateTime.now().minus(1, ChronoUnit.MINUTES)
+                LocalDateTime.now().minusMinutes(1)
         );
         network.createSubscription(subscription);
     }

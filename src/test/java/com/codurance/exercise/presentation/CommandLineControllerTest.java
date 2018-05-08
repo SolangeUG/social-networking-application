@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -81,7 +80,7 @@ class CommandLineControllerTest {
      */
     private void postAliceMessages() {
         String user = "Alice";
-        LocalDateTime timestamp = LocalDateTime.now().minus(5, ChronoUnit.MINUTES);
+        LocalDateTime timestamp = LocalDateTime.now().minusMinutes(5);
         String message = "I love the weather today";
         controller.postMessage(user, message, timestamp);
     }
@@ -92,11 +91,11 @@ class CommandLineControllerTest {
     private void postBobMessages() {
         String user = "Bob";
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime timestamp = now.minus(2, ChronoUnit.MINUTES);
+        LocalDateTime timestamp = now.minusMinutes(2);
         String message = "Damn! We Lost!";
         controller.postMessage(user, message, timestamp);
 
-        timestamp = now.minus(1, ChronoUnit.MINUTES);
+        timestamp = now.minusMinutes(1);
         message = "Good game though.";
         controller.postMessage(user, message, timestamp);
     }
@@ -107,7 +106,7 @@ class CommandLineControllerTest {
     private void postCharlieMessages() {
         String user = "Charlie";
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime timestamp = now.minus(2, ChronoUnit.SECONDS);
+        LocalDateTime timestamp = now.minusSeconds(2);
         String message = "I'm in New York today! Anyone want to have a coffee?";
         controller.postMessage(user, message, timestamp);
     }
