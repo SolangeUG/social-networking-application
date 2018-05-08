@@ -1,6 +1,7 @@
 package com.codurance.exercise.presentation;
 
 import com.codurance.exercise.wrapper.ContentWrapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -13,12 +14,14 @@ import static org.junit.jupiter.api.Assertions.*;
  * Command-Line Controller unit tests
  * @author Solange U. Gasengayire
  */
+@DisplayName("Command Line Controller Unit Tests")
 class CommandLineControllerTest {
 
     private CommandLineController controller =
             new CommandLineController();
 
     @Test
+    @DisplayName("Posting and reading a message")
     void shouldReturnUserFirstMessage() {
         postAliceMessages();
 
@@ -34,6 +37,7 @@ class CommandLineControllerTest {
     }
 
     @Test
+    @DisplayName("Posting and reading messages in chronological order")
     void shouldReturnedListOfMessages() {
         postBobMessages();
 
@@ -48,6 +52,7 @@ class CommandLineControllerTest {
     }
 
     @Test
+    @DisplayName("Posting, following and displaying user wall")
     void shouldReturnAggregatedListOfMessages() {
         postCharlieMessages();
 
