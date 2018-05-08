@@ -1,7 +1,6 @@
 package com.codurance.exercise.wrapper;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -28,6 +27,21 @@ public class ContentWrapper {
         this.creationTimestamp = timestamp;
 
         this.messageBundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+    }
+
+    /**
+     * Constructor
+     * @param owner content owner/author
+     * @param message actual content
+     * @param timestamp content creation timestamp
+     * @param locale context locale
+     */
+    ContentWrapper(String owner, String message, LocalDateTime timestamp, Locale locale) {
+        this.owner = owner;
+        this.content = message;
+        this.creationTimestamp = timestamp;
+
+        this.messageBundle = ResourceBundle.getBundle("messages", locale);
     }
 
     /**
@@ -77,14 +91,14 @@ public class ContentWrapper {
      */
     @Override
     public String toString() {
-        return owner + " -> " + formatContent();
+        return owner + " -> " + getFormattedContent();
     }
 
     /**
      * Return a string representation of this wrapper's content
      * @return wrapper content with duration
      */
-    public String formatContent() {
+    String getFormattedContent() {
         return content + " " + formatDuration();
     }
 
@@ -95,7 +109,7 @@ public class ContentWrapper {
      * @return time difference as string
      */
     private String formatDuration() {
-        Duration timeDiff = Duration.between(LocalDateTime.now(), creationTimestamp);
+        Duration timeDiff = Duration.between(creationTimestamp, LocalDateTime.now());
         String result;
 
         long duration = timeDiff.toDays();
@@ -125,7 +139,7 @@ public class ContentWrapper {
      * @return localized string representation of duration
      */
     private String formatDurationWithUnit(String unit, long duration) {
-        String messageKey = "content.time.difference" + unit;
+        String messageKey = "content.time.difference." + unit;
         String result = messageBundle.getString(messageKey);
         if (duration > 1) {
             messageKey += "s";
