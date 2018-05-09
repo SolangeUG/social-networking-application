@@ -29,6 +29,15 @@ class ContentWrapperTest {
         assertNotNull(content);
         assertFalse(content.isEmpty());
         assertTrue(content.contains("4 days ago"));
+
+        // Testing seconds
+        wrapper = new ContentWrapper(
+                "Alice",
+                "I love the weather today",
+                now.minusSeconds(24)
+        );
+        content = wrapper.getFormattedContent();
+        assertTrue(content.contains("24 seconds ago"));
     }
 
     @Test
