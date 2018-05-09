@@ -53,7 +53,15 @@ public class User {
      * @return subscriptions
      */
     public List<User> getSubscriptions() {
-        return subscriptions;
+        return new LinkedList<>(subscriptions);
+    }
+
+    /**
+     * Return a list of all content from this user
+     * @return content list
+     */
+    public List<Content> getAllContent() {
+        return new LinkedList<>(contentList);
     }
 
     /**
