@@ -3,14 +3,10 @@ package com.codurance.exercise.wrapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Content wrapper class unit tests
@@ -52,6 +48,7 @@ class ContentWrapperTest {
 
         content = wrapper.toString();
         assertTrue(content.contains("Jeanne"));
+        assertTrue(content.startsWith("Jeanne - "));
     }
 
     @Test
@@ -72,5 +69,24 @@ class ContentWrapperTest {
 
         content = wrapper.toString();
         assertTrue(content.contains("Pedro"));
+        assertTrue(content.startsWith("Pedro - "));
+    }
+
+    @Test
+    @DisplayName("Return false when comparing two different content wrappers")
+    void shouldReturnFalseWhenComparingDifferentObjects() {
+        ContentWrapper wrapper1 = new ContentWrapper(
+                "Jeanne",
+                "J'adore la météo aujourd'hui",
+                LocalDateTime.now().minusDays(1)
+        );
+
+        ContentWrapper wrapper2 = new ContentWrapper(
+                "Jeanne",
+                "J'adore la météo aujourd'hui",
+                LocalDateTime.now().minusDays(2)
+        );
+
+        assertNotEquals(wrapper1, wrapper2);
     }
 }
