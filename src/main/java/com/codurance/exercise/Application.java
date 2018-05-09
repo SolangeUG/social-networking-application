@@ -1,13 +1,12 @@
 package com.codurance.exercise;
 
 import com.codurance.exercise.presentation.CommandLineController;
+import com.codurance.exercise.util.Constants;
 import com.codurance.exercise.wrapper.ContentWrapper;
 
 import java.io.Console;
 import java.time.LocalDateTime;
-import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 /**
  * Console-based social networking application
@@ -19,25 +18,21 @@ public class Application {
 
     private static Console console = System.console();
 
-    private static ResourceBundle bundle = ResourceBundle.getBundle(
-            "messages",
-            Locale.getDefault());
-
     /**
      * Application entry point
      * @param args application arguments
      */
     public static void main( String[] args ) {
         if (console == null) {
-            System.err.println(bundle.getString("application.messages.error.console"));
+            System.err.println(Constants.CONSOLE_ERROR_MESSAGE);
             System.exit(1);
         }
 
         // print a startup message
-        console.writer().println(bundle.getString("application.messages.startup"));
+        console.writer().println(Constants.STARTUP_MESSAGE);
 
         // prompt user for command
-        String prompt = bundle.getString("application.messages.prompt");
+        String prompt = Constants.PROMPT_MESSAGE;
         String command = console.readLine(prompt);
 
         while (command != null && ! command.isEmpty()) {
@@ -47,7 +42,7 @@ public class Application {
 
             if (result == 1) {
                 // when exit command is requested
-                console.writer().println(bundle.getString("application.messages.exit"));
+                console.writer().println(Constants.EXIT_MESSAGE);
                 console.flush();
                 System.exit(1);
             }
