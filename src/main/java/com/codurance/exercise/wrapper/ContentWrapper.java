@@ -75,23 +75,51 @@ public class ContentWrapper {
      * be a concise but informative representation that is easy for a
      * person to read.
      * It is recommended that all subclasses override this method.
-     * <p>
-     * The {@code toString} method for class {@code Object}
-     * returns a string consisting of the name of the class of which the
-     * object is an instance, the at-sign character `{@code @}', and
-     * the unsigned hexadecimal representation of the hash code of the
-     * object. In other words, this method returns a string equal to the
-     * value of:
-     * <blockquote>
-     * <pre>
-     * getClass().getName() + '@' + Integer.toHexString(hashCode())
-     * </pre></blockquote>
      *
      * @return a string representation of the object.
      */
     @Override
     public String toString() {
-        return owner + " -> " + getFormattedContent();
+        return String.format(
+                "%s - %s",
+                owner,
+                getFormattedContent()
+        );
+    }
+
+    /**
+     * Returns a hash code value for the object.
+     * @return a hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + owner.hashCode();
+        result = prime * result + content.hashCode();
+        result = prime * result + creationTimestamp.hashCode();
+        return result;
+    }
+
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     * @param obj the reference object with which to compare.
+     * @return {@code true} if this object is the same as the obj
+     * argument; {@code false} otherwise.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        ContentWrapper other = (ContentWrapper) obj;
+        return owner.equals(other.getOwner())
+                && content.equals(other.getContent())
+                && creationTimestamp.equals(other.getCreationTimestamp());
     }
 
     /**
