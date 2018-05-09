@@ -9,7 +9,6 @@ import java.util.List;
  */
 public class User {
     private String name;
-    private List<User> subscriptions = new LinkedList<>();
     private List<Content> contentList = new LinkedList<>();
     private List<Connection> connections = new LinkedList<>();
 
@@ -31,7 +30,6 @@ public class User {
         if (link == null)
             return false;
 
-        subscriptions.add(link.getTarget());
         return connections.add(link);
     }
 
@@ -53,7 +51,11 @@ public class User {
      * @return subscriptions
      */
     public List<User> getSubscriptions() {
-        return new LinkedList<>(subscriptions);
+        List<User> subscriptions = new LinkedList<>();
+        for (Connection connection: connections) {
+            subscriptions.add(connection.getTarget());
+        }
+        return subscriptions;
     }
 
     /**
