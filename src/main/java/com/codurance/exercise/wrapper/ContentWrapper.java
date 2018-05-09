@@ -152,8 +152,8 @@ public class ContentWrapper {
                 if (duration >= 1) {
                     result = formatDurationWithUnit("minute", duration);
                 } else {
-                    duration = timeDiff.toMillis() * 1000;
-                    result = formatDurationWithUnit("hour", duration);
+                    duration = timeDiff.toMillis() / 1000;
+                    result = formatDurationWithUnit("second", duration);
                 }
             }
         }
