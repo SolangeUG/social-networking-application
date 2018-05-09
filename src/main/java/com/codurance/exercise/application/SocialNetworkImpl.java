@@ -8,10 +8,7 @@ import com.codurance.exercise.wrapper.ContentWrapper;
 import com.codurance.exercise.wrapper.SubscriptionWrapper;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Social network API methods implementation.
@@ -73,7 +70,7 @@ public class SocialNetworkImpl implements SocialNetwork {
      */
     @Override
     public Map<LocalDateTime, ContentWrapper> getContent(String username) {
-        Map<LocalDateTime, ContentWrapper> userContent = new TreeMap<>();
+        Map<LocalDateTime, ContentWrapper> userContent = new TreeMap<>(Comparator.reverseOrder());
 
         User user = users.get(username);
         if (user != null) {
@@ -97,7 +94,7 @@ public class SocialNetworkImpl implements SocialNetwork {
      */
     @Override
     public Map<LocalDateTime, ContentWrapper> getAllContent(String username) {
-        TreeMap<LocalDateTime, ContentWrapper> allContent = new TreeMap<>();
+        TreeMap<LocalDateTime, ContentWrapper> allContent = new TreeMap<>(Comparator.reverseOrder());
 
         User requestedUser = users.get(username);
         if (requestedUser != null) {
