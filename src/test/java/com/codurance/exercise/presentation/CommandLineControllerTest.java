@@ -31,8 +31,10 @@ class CommandLineControllerTest {
         assertEquals(1, messages.size());
         assertNotNull(messagesArray);
         assertEquals(1, messagesArray.length);
-        assertTrue(((String) messagesArray[0]).contains("I love the weather today"));
-        assertTrue(((String) messagesArray[0]).contains("minutes ago)"));
+
+        ContentWrapper wrapper = (ContentWrapper) messagesArray[0];
+        assertTrue(wrapper.getFormattedContent().contains("I love the weather today"));
+        assertTrue(wrapper.getFormattedContent().contains("minutes ago)"));
     }
 
     @Test
@@ -46,13 +48,19 @@ class CommandLineControllerTest {
         assertNotNull(messages);
         assertEquals(2, messages.size());
         assertEquals(2, messagesArray.length);
-        assertTrue(((String) messagesArray[0]).contains("Good game though."));
-        assertTrue(((String) messagesArray[1]).contains("Damn! We lost!"));
+
+        ContentWrapper wrapper = (ContentWrapper) messagesArray[0];
+        assertEquals("Good game though.", wrapper.getContent());
+
+        wrapper = (ContentWrapper) messagesArray[1];
+        assertEquals("Damn! We lost!", wrapper.getContent());
     }
 
     @Test
     @DisplayName("Posting, following and displaying user wall")
     void shouldReturnAggregatedListOfMessages() {
+        postAliceMessages();
+        postBobMessages();
         postCharlieMessages();
 
         controller.addFollowing("Charlie", "Alice", LocalDateTime.now());
@@ -61,18 +69,35 @@ class CommandLineControllerTest {
 
         assertNotNull(aggregatedMessages);
         assertEquals(2, aggregatedMessages.size());
-        assertTrue(((String) wall[0]).contains("Charlie"));
-        assertTrue(((String) wall[1]).contains("Alice"));
+
+        ContentWrapper wrapper = (ContentWrapper) wall[0];
+        assertEquals("Charlie", wrapper.getOwner());
+        assertTrue(wrapper.getFormattedContent().contains("(2 seconds ago)"));
+
+        wrapper = (ContentWrapper) wall[1];
+        assertEquals("Alice", wrapper.getOwner());
 
         controller.addFollowing("Charlie", "Bob", LocalDateTime.now());
         aggregatedMessages = controller.getAllMessages("Charlie");
         wall = aggregatedMessages.values().toArray();
 
         assertEquals(4, aggregatedMessages.size());
-        assertTrue(((String) wall[0]).contains("Charlie"));
-        assertTrue(((String) wall[1]).contains("Bob"));
-        assertTrue(((String) wall[2]).contains("Bob"));
-        assertTrue(((String) wall[3]).contains("Alice"));
+
+        wrapper = (ContentWrapper) wall[0];
+        assertEquals("Charlie", wrapper.getOwner());
+        assertTrue(wrapper.getFormattedContent().contains("(2 seconds ago)"));
+
+        wrapper = (ContentWrapper) wall[1];
+        assertEquals("Bob", wrapper.getOwner());
+        assertTrue(wrapper.getContent().contains("though."));
+
+        wrapper = (ContentWrapper) wall[2];
+        assertEquals("Bob", wrapper.getOwner());
+        assertTrue(wrapper.getContent().contains("We lost!"));
+
+        wrapper = (ContentWrapper) wall[3];
+        assertEquals("Alice", wrapper.getOwner());
+        assertTrue(wrapper.getFormattedContent().contains("(5 minutes ago)"));
     }
 
     /**
@@ -92,7 +117,7 @@ class CommandLineControllerTest {
         String user = "Bob";
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime timestamp = now.minusMinutes(2);
-        String message = "Damn! We Lost!";
+        String message = "Damn! We lost!";
         controller.postMessage(user, message, timestamp);
 
         timestamp = now.minusMinutes(1);
