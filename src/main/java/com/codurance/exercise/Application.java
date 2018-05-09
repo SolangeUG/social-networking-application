@@ -36,14 +36,13 @@ public class Application {
         String command = console.readLine(prompt);
 
         while (command != null && ! command.isEmpty()) {
-            // retrieve and execute input command and parameters from the console
-            String[] parameters = command.split("\\s+");
-            int result = executeCommand(parameters);
+            int result = executeCommand(command);
 
             if (result == 1) {
                 // when exit command is requested
                 console.writer().println(Constants.EXIT_MESSAGE);
-                console.flush();
+                console.writer().flush();
+                console.writer().close();
                 System.exit(1);
             }
             // read next command
@@ -53,59 +52,52 @@ public class Application {
 
     /**
      * Execute input command from the user
-     * @param parameters command parameters
+     * @param command user command (string)
      * @return result status code
      *         1 -> application exit code
      *         0 -> any-other-case code
      */
-    private static int executeCommand(String[] parameters) {
-        if (parameters != null) {
+    private static int executeCommand(String command) {
 
-            // assuming user input command is well-formed,
-            // then parameters should take one of these forms:
-            //      (1) parameters[0] => user name
-            //      (2) parameters[0] => QUIT
-            //      (3) parameters[0] => user name | parameters[1] => wall
-            //      (4) parameters[0] => user name | parameters[1] => ->        | parameters[2] => message
-            //      (5) parameters[0] => user name | parameters[1] => follows   | parameters[2] => other user
+        // assuming user input command is well-formed,
+        // then we should have the following cases:
 
-            // The first parameter is either a user's name or the QUIT command
-            String firstParam = parameters[0];
-
-            int paramCount = parameters.length;
-            switch (paramCount) {
-                case 1:
-                    if ("QUIT".equals(firstParam)) {
-                        // Exit the application
-                        return 1;
-                    }
-                    // Read a user's timeline
-                    read(firstParam);
-                    break;
-
-                case 2:
-                    // Display a user's wall
-                    displayWall(firstParam);
-                    break;
-
-                case 3:
-                    // POST or FOLLOW
-                    String command = parameters[1];
-                    String subject = parameters[2];
-                    if ("->".equals(command)) {
-                        // A user posts a message
-                        post(firstParam, subject);
-                    } else {
-                        // A user follows another user
-                        follow(firstParam, subject);
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-
+        // user is posting a message
+        if (command.contains("->")) {
+            int ndx = command.indexOf("->");
+            int size = "->".length();
+            String username = command.substring(0, ndx).trim();
+            String message = command.substring(ndx + size).trim();
+            post(username, message);
+            return 0;
         }
+
+        // user is following another user
+        if (command.contains("follows")) {
+            int ndx = command.indexOf("follows");
+            int size = "follows".length();
+            String username = command.substring(0, ndx).trim();
+            String otherUser = command.substring(ndx + size).trim();
+            follow(username, otherUser);
+            return 0;
+        }
+
+        // user requests to display their aggregated wall
+        if (command.contains("wall")) {
+            int ndx = command.indexOf("wall");
+            String username = command.substring(0, ndx).trim();
+            displayWall(username);
+            return 0;
+        }
+
+        // user exits the application
+        if ("QUIT".equals(command)) {
+            return 1;
+        }
+
+        // user requests to display their wall
+        String username = command.trim();
+        read(username);
         return 0;
     }
 
@@ -139,6 +131,7 @@ public class Application {
             builder.append("\n");
         }
         console.writer().println(builder.toString());
+        console.writer().flush();
     }
 
     /**
@@ -150,10 +143,11 @@ public class Application {
         Map<LocalDateTime, ContentWrapper> wall = controller.getAllMessages(user);
         StringBuilder builder = new StringBuilder();
         for (ContentWrapper wrapper: wall.values()) {
-            builder.append(wrapper.getFormattedContent());
+            builder.append(wrapper.toString());
             builder.append("\n");
         }
         console.writer().println(builder.toString());
+        console.writer().flush();
     }
 
 }
