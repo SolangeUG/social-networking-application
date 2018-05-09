@@ -39,6 +39,7 @@ class SocialNetworkImplTest {
     @Test
     @DisplayName("Adding a subscription")
     void shouldIncludeSubscriptionContent() {
+        postAliceContent();
         postBobContent();
         postCharlieContent();
         createCharlieSubscriptionToAlice();
@@ -59,6 +60,10 @@ class SocialNetworkImplTest {
     @Test
     @DisplayName("Retrieving aggregated content from all subscriptions in descending order of creation time")
     void shouldIncludeAllSubscriptionContentInSortedOrder() {
+        postAliceContent();
+        postBobContent();
+        postCharlieContent();
+        createCharlieSubscriptionToAlice();
         createCharlieSubscriptionToBob();
 
         Map<LocalDateTime, ContentWrapper> allContent = network.getAllContent("Charlie");
