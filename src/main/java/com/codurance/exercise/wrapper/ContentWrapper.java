@@ -1,5 +1,7 @@
 package com.codurance.exercise.wrapper;
 
+import com.codurance.exercise.util.Constants;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -142,18 +144,18 @@ public class ContentWrapper {
 
         long duration = timeDiff.toDays();
         if (duration >= 1) {
-            result = formatDurationWithUnit("day", duration);
+            result = formatDurationWithUnit(Constants.CHRONO_UNIT_DAY, duration);
         } else {
             duration = timeDiff.toHours();
             if (duration >= 1) {
-                result = formatDurationWithUnit("hour", duration);
+                result = formatDurationWithUnit(Constants.CHRONO_UNIT_HOUR, duration);
             } else {
                 duration = timeDiff.toMinutes();
                 if (duration >= 1) {
-                    result = formatDurationWithUnit("minute", duration);
+                    result = formatDurationWithUnit(Constants.CHRONO_UNIT_MINUTE, duration);
                 } else {
                     duration = timeDiff.toMillis() / 1000;
-                    result = formatDurationWithUnit("second", duration);
+                    result = formatDurationWithUnit(Constants.CHRONO_UNIT_SECOND, duration);
                 }
             }
         }
@@ -167,10 +169,10 @@ public class ContentWrapper {
      * @return localized string representation of duration
      */
     private String formatDurationWithUnit(String unit, long duration) {
-        String messageKey = "content.time.difference." + unit;
+        String messageKey = Constants.TIME_DIFFERENCE_PREFIX + unit;
         String result = messageBundle.getString(messageKey);
         if (duration > 1) {
-            messageKey += "s";
+            messageKey += Constants.TIME_DIFFERENCE_SUFFIX;
             result = String.format(
                     messageBundle.getString(messageKey),
                     duration
