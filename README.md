@@ -43,6 +43,18 @@ Alice - I love the weather today (5 minutes ago)
 
 ````
 
+- **Non-existing users are created as they post their first message**. 
+The assumption made here is that a non-existing user can only access the application functionalities **after** they've posted
+their first message.
+
+````
+> Diego
+
+> Diego follows Alice
+> Diego wall
+
+````
+
 
 ## Requirements
 
