@@ -54,8 +54,8 @@
                         <archive>
                             <manifest>
                                 <addClasspath>true</addClasspath>
+                                <classpathPrefix>lib/</classpathPrefix>
                                 <mainClass>com.codurance.exercise.Application</mainClass>
-                                <classpathPrefix>dependency-jars/</classpathPrefix>
                             </manifest>
                         </archive>
                     </configuration>
@@ -74,7 +74,7 @@
                             </goals>
                             <configuration>
                                 <outputDirectory>
-                                    ${project.build.directory}/dependency-jars
+                                    ${project.build.directory}/lib
                                 </outputDirectory>
                             </configuration>
                         </execution>
