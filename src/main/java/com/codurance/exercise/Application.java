@@ -1,5 +1,6 @@
 package com.codurance.exercise;
 
+import com.codurance.exercise.presentation.Command;
 import com.codurance.exercise.presentation.CommandLineController;
 import com.codurance.exercise.util.Constants;
 import com.codurance.exercise.wrapper.ContentWrapper;
@@ -33,72 +34,52 @@ public class Application {
 
         // prompt user for command
         String prompt = Constants.PROMPT_MESSAGE;
-        String command = console.readLine(prompt);
+        String instruction = console.readLine(prompt);
 
-        while (command != null && ! command.isEmpty()) {
-            int result = executeCommand(command);
-
-            if (result == 1) {
-                // when exit command is requested
-                console.writer().println(Constants.EXIT_MESSAGE);
-                console.writer().flush();
-                console.writer().close();
-                System.exit(1);
-            }
+        while (instruction != null && ! instruction.isEmpty()) {
+            // execute user instruction
+            executeCommand(instruction);
             // read next command
-            command = console.readLine("> ");
+            instruction = console.readLine("> ");
         }
     }
 
     /**
      * Execute input command from the user
-     * @param command user command (string)
-     * @return result status code
-     *         1 -> application exit code
-     *         0 -> any-other-case code
+     * @param instruction user command (string)
      */
-    private static int executeCommand(String command) {
+    private static void executeCommand(String instruction) {
 
-        // assuming user input command is well-formed,
-        // then we should have the following cases:
+        Command command = new Command(instruction);
+        String operator = command.getOperator();
+        String operand = command.getOperand();
 
-        // user is posting a message
-        if (command.contains("->")) {
-            int ndx = command.indexOf("->");
-            int size = "->".length();
-            String username = command.substring(0, ndx).trim();
-            String message = command.substring(ndx + size).trim();
-            post(username, message);
-            return 0;
+        switch (command.getOperation()) {
+            case POST:
+                post(operator, operand);
+                break;
+
+            case READ:
+                read(operator);
+                break;
+
+            case FOLLOW:
+                follow(operator, operand);
+                break;
+
+            case WALL:
+                displayWall(operator);
+                break;
+
+            case QUIT:
+                console.writer().println(Constants.EXIT_MESSAGE);
+                console.writer().flush();
+                console.writer().close();
+                System.exit(0);
+
+            default:
+                break;
         }
-
-        // user is following another user
-        if (command.contains("follows")) {
-            int ndx = command.indexOf("follows");
-            int size = "follows".length();
-            String username = command.substring(0, ndx).trim();
-            String otherUser = command.substring(ndx + size).trim();
-            follow(username, otherUser);
-            return 0;
-        }
-
-        // user requests to display their aggregated wall
-        if (command.contains("wall")) {
-            int ndx = command.indexOf("wall");
-            String username = command.substring(0, ndx).trim();
-            displayWall(username);
-            return 0;
-        }
-
-        // user exits the application
-        if ("QUIT".equals(command)) {
-            return 1;
-        }
-
-        // user requests to display their wall
-        String username = command.trim();
-        read(username);
-        return 0;
     }
 
     /**
@@ -149,5 +130,4 @@ public class Application {
         console.writer().println(builder.toString());
         console.writer().flush();
     }
-
 }
