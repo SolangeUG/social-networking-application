@@ -69,7 +69,7 @@ public class SocialNetworkImpl implements SocialNetwork {
     @Override
     public String getContent(String username) {
         User user = users.get(username);
-        return getMapAsString(user.getAllContent(), false);
+        return getContentAsString(user.getAllContent(), false);
     }
 
     /**
@@ -80,28 +80,28 @@ public class SocialNetworkImpl implements SocialNetwork {
      */
     @Override
     public String getAllContent(String username) {
-        TreeMap<LocalDateTime, Content> allContent = getUserAggregatedContent(username);
-        return getMapAsString(allContent,true);
+        Set<Content> allContent = getUserAggregatedContent(username);
+        return getContentAsString(allContent,true);
     }
 
     /**
      * Get created content for a given user
      * @param username specified user name
-     * @return the request list of content
+     * @return the request set of content
      */
-    Map<LocalDateTime, Content> getUserContent(String username) {
+    Set<Content> getUserContent(String username) {
         User user = users.get(username);
         return user.getAllContent();
     }
 
     /**
-     * Get an aggregated map of content from a given user
+     * Get an aggregated set of content from a given user
      * and the users they are following (they subscribed to)
      * @param username the specified user name
-     * @return the request map of aggregated content
+     * @return the request set of aggregated content
      */
-    TreeMap<LocalDateTime, Content> getUserAggregatedContent(String username) {
-        TreeMap<LocalDateTime, Content> allContent = new TreeMap<>(Comparator.reverseOrder());
+    Set<Content> getUserAggregatedContent(String username) {
+        Set<Content> aggregatedContent = new TreeSet<>();
 
         User requestedUser = users.get(username);
         if (requestedUser != null) {
@@ -112,21 +112,21 @@ public class SocialNetworkImpl implements SocialNetwork {
             // build an aggregated list of the requested user's messages
             // and all the messages of the users they follow
             for (User user: following) {
-                allContent.putAll(user.getAllContent());
+                aggregatedContent.addAll(user.getAllContent());
             }
         }
-        return allContent;
+        return aggregatedContent;
     }
 
     /**
-     * Return a string representing the content of a map
-     * @param map the specified map of content
+     * Return a string representing the content of a set of content
+     * @param contentSet the specified map of content
      * @param withUser include user name
      * @return the map as a string
      */
-    private String getMapAsString(Map<LocalDateTime, Content> map, boolean withUser) {
+    private String getContentAsString(Set<Content> contentSet, boolean withUser) {
         StringBuilder builder = new StringBuilder();
-        for (Content content: map.values()) {
+        for (Content content: contentSet) {
             String contentStr = withUser ? content.toString() : content.formatContent();
             builder.append(contentStr);
             builder.append("\n");
