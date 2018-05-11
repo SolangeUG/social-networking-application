@@ -1,10 +1,6 @@
 package com.codurance.exercise.domain;
 
-import java.text.DateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Locale;
 
 /**
  * A class to represent messages that are
@@ -82,16 +78,6 @@ public class Message extends Content {
      */
     @Override
     public String toString() {
-        DateTimeFormatter formatter
-                = DateTimeFormatter
-                    .ofLocalizedDateTime(FormatStyle.FULL)
-                    .withLocale(Locale.getDefault());
-
-        return String.format(
-                "%s - %s (%s)",
-                owner.toString(),
-                content,
-                creationDate.format(formatter)
-        );
+        return super.toString();
     }
 }
