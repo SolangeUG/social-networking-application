@@ -1,7 +1,9 @@
 package com.codurance.exercise.domain;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * A class that represents a user in a social network
@@ -9,8 +11,8 @@ import java.util.*;
  */
 public class User {
     private String name;
+    private Set<Content> contentSet = new TreeSet<>();
     private List<Connection> connections = new LinkedList<>();
-    private Map<LocalDateTime, Content> contentMap = new TreeMap<>(Comparator.reverseOrder());
 
     /**
      * Constructor
@@ -42,8 +44,8 @@ public class User {
     public boolean addContent(Content content) {
         if (content == null)
             return false;
-        Content result = contentMap.put(content.getCreationDate(), content);
-        return result != null;
+
+        return contentSet.add(content);
     }
 
     /**
@@ -59,13 +61,11 @@ public class User {
     }
 
     /**
-     * Return a map of all content from this user
-     * @return content map
+     * Return a set of all content from this user
+     * @return content set
      */
-    public Map<LocalDateTime, Content> getAllContent() {
-        Map<LocalDateTime, Content> result = new TreeMap<>(Comparator.reverseOrder());
-        result.putAll(contentMap);
-        return result;
+    public Set<Content> getAllContent() {
+        return new TreeSet<>(contentSet);
     }
 
     /**
@@ -85,7 +85,7 @@ public class User {
         final int prime = 31;
         int result = 1;
         result = prime * result + name.hashCode();
-        result = prime * result + contentMap.hashCode();
+        result = prime * result + contentSet.hashCode();
         result = prime * result + connections.hashCode();
         return result;
     }
@@ -107,7 +107,7 @@ public class User {
 
         User other = (User) obj;
         return name.equals(other.name)
-                && contentMap.equals(other.contentMap)
+                && contentSet.equals(other.contentSet)
                 && connections.equals(other.connections);
     }
 
