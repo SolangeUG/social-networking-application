@@ -1,7 +1,6 @@
 package com.codurance.exercise.application;
 
-import com.codurance.exercise.wrapper.ContentWrapper;
-import com.codurance.exercise.wrapper.SubscriptionWrapper;
+import com.codurance.exercise.domain.Content;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,47 +13,54 @@ import static org.junit.jupiter.api.Assertions.*;
  * Social network API methods implementation unit tests
  * @author Solange U. Gasengayire
  */
-@DisplayName("Social Network")
+@DisplayName("Social Network Unit Tests")
 class SocialNetworkImplTest {
 
-    private SocialNetwork network = new SocialNetworkImpl();
+    private SocialNetworkImpl network = new SocialNetworkImpl();
 
     @Test
     @DisplayName("Creating and retrieving content")
     void shouldReturnCreatedContent() {
         postAliceContent();
 
-        Map<LocalDateTime, ContentWrapper> content = network.getContent("Alice");
-        Object[] contentArray = content.values().toArray();
+        Map<LocalDateTime, Content> aliceContent = network.getUserContent("Alice");
+        Object[] contentArray = aliceContent.values().toArray();
+        Content content = (Content) contentArray[0];
 
-        assertNotNull(content);
-        assertFalse(content.isEmpty());
-        assertNotNull(contentArray);
-        assertEquals(1, contentArray.length);
+        assertAll("Post and retrieve a message",
+                () -> assertNotNull(aliceContent),
+                () -> assertFalse(aliceContent.isEmpty()),
+                () -> assertEquals(1, aliceContent.size()),
+                () -> assertEquals("I love the weather today", content.getContent())
+        );
 
-        ContentWrapper wrapper = (ContentWrapper) contentArray[0];
-        assertEquals("I love the weather today", wrapper.getContent());
+        postBobContent();
+
+        Map<LocalDateTime, Content> bobContent = network.getUserContent("Bob");
+        Object[] bobArray = bobContent.values().toArray();
+        assertAll("Posted messages should be retrieved in reverse order of creation",
+                () -> assertEquals(2, bobArray.length),
+                () -> assertEquals("Good game though.", ((Content) bobArray[0]).getContent()),
+                () -> assertEquals("Damn! We lost!", ((Content) bobArray[1]).getContent())
+        );
     }
 
     @Test
     @DisplayName("Adding a subscription")
     void shouldIncludeSubscriptionContent() {
         postAliceContent();
-        postBobContent();
         postCharlieContent();
         createCharlieSubscriptionToAlice();
 
-        Map<LocalDateTime, ContentWrapper> allContent = network.getAllContent("Charlie");
+        Map<LocalDateTime, Content> allContent = network.getUserAggregatedContent("Charlie");
         Object[] contentArray = allContent.values().toArray();
 
-        assertNotNull(contentArray);
-        assertEquals(2, contentArray.length);
-
-        ContentWrapper wrapper = (ContentWrapper) contentArray[0];
-        assertEquals("Charlie", wrapper.getOwner());
-
-        wrapper = (ContentWrapper) contentArray[1];
-        assertEquals("Alice", wrapper.getOwner());
+        assertAll("Create a subscription and display aggregate content list",
+                () -> assertNotNull(contentArray),
+                () -> assertEquals(2, contentArray.length),
+                () -> assertEquals("Charlie", ((Content) contentArray[0]).getOwner().getName()),
+                () -> assertEquals("Alice", ((Content) contentArray[1]).getOwner().getName())
+        );
     }
 
     @Test
@@ -66,97 +72,84 @@ class SocialNetworkImplTest {
         createCharlieSubscriptionToAlice();
         createCharlieSubscriptionToBob();
 
-        Map<LocalDateTime, ContentWrapper> allContent = network.getAllContent("Charlie");
+        Map<LocalDateTime, Content> allContent = network.getUserAggregatedContent("Charlie");
         Object[] contentArray = allContent.values().toArray();
 
-        assertNotNull(contentArray);
-        assertEquals(4, contentArray.length);
-
         LocalDateTime timestamp = LocalDateTime.now();
-        for (Map.Entry<LocalDateTime, ContentWrapper> set: allContent.entrySet()) {
+        for (Map.Entry<LocalDateTime, Content> set: allContent.entrySet()) {
             assertTrue(set.getKey().isBefore(timestamp));
             timestamp = set.getKey();
         }
 
-        ContentWrapper wrapper = (ContentWrapper) contentArray[0];
-        assertEquals("Charlie", wrapper.getOwner());
+        assertAll("Aggregated content should be display in reverse order of creation",
+                () -> assertNotNull(contentArray),
+                () -> assertEquals(4, contentArray.length),
+                () -> assertEquals("Charlie", ((Content) contentArray[0]).getOwner().getName()),
+                () -> assertEquals("Bob", ((Content) contentArray[1]).getOwner().getName()),
+                () -> assertEquals("Damn! We lost!", ((Content) contentArray[2]).getContent()),
+                () -> assertEquals("Alice", ((Content) contentArray[3]).getOwner().getName())
+        );
 
-        wrapper = (ContentWrapper) contentArray[1];
-        assertEquals("Bob", wrapper.getOwner());
-
-        wrapper = (ContentWrapper) contentArray[2];
-        assertEquals("Damn! We lost!", wrapper.getContent());
-
-        wrapper = (ContentWrapper) contentArray[3];
-        assertEquals("Alice", wrapper.getOwner());
     }
-
-
 
     /**
      * Prepare and create Alice's content
      */
     private void postAliceContent() {
-        ContentWrapper content = new ContentWrapper(
+        network.createContent(
                 "Alice",
                 "I love the weather today",
                 LocalDateTime.now().minusMinutes(10)
         );
-        network.createContent(content);
     }
 
     /**
      * Prepare and create Bob's content
      */
     private void postBobContent() {
-        ContentWrapper content = new ContentWrapper(
+        network.createContent(
                 "Bob",
                 "Damn! We lost!",
                 LocalDateTime.now().minusMinutes(8)
         );
-        network.createContent(content);
 
-        content = new ContentWrapper(
+        network.createContent(
                 "Bob",
                 "Good game though.",
                 LocalDateTime.now().minusMinutes(6)
         );
-        network.createContent(content);
     }
 
     /**
      * Prepare and create Charlie's content
      */
     private void postCharlieContent() {
-        ContentWrapper content = new ContentWrapper(
+        network.createContent(
                 "Charlie",
                 "I'm in New York today! Anyone want to have a coffee?",
                 LocalDateTime.now().minusMinutes(4)
         );
-        network.createContent(content);
     }
 
     /**
      * Add Charlie to Alice's followers
      */
     private void createCharlieSubscriptionToAlice() {
-        SubscriptionWrapper subscription = new SubscriptionWrapper(
+        network.createSubscription(
                 "Charlie",
                 "Alice",
                 LocalDateTime.now().minusMinutes(2)
         );
-        network.createSubscription(subscription);
     }
 
     /**
      * Add Charlie to Bob's followers
      */
     private void createCharlieSubscriptionToBob() {
-        SubscriptionWrapper subscription = new SubscriptionWrapper(
+        network.createSubscription(
                 "Charlie",
                 "Bob",
                 LocalDateTime.now().minusMinutes(1)
         );
-        network.createSubscription(subscription);
     }
 }

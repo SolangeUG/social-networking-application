@@ -1,11 +1,7 @@
 package com.codurance.exercise.presentation;
 
-import com.codurance.exercise.wrapper.ContentWrapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,118 +17,66 @@ class CommandLineControllerTest {
 
     @Test
     @DisplayName("Posting and reading a message")
-    void shouldReturnUserFirstMessage() {
-        postAliceMessages();
+    void shouldReturnUserFirstMessage() throws Exception {
+        controller.executeInstruction("Alice -> I love the weather today");
 
-        Map<LocalDateTime, ContentWrapper> messages = controller.getUserMessages("Alice");
-        Object[] messagesArray = messages.values().toArray();
+        Thread.sleep(4000);
+        String aliceMessage = controller.executeInstruction("Alice");
 
-        assertNotNull(messages);
-        assertEquals(1, messages.size());
-        assertNotNull(messagesArray);
-        assertEquals(1, messagesArray.length);
-
-        ContentWrapper wrapper = (ContentWrapper) messagesArray[0];
-        assertTrue(wrapper.getFormattedContent().contains("I love the weather today"));
-        assertTrue(wrapper.getFormattedContent().contains("minutes ago)"));
+        assertAll("Post and read a user's message",
+                () -> assertNotNull(aliceMessage),
+                () -> assertNotEquals("", aliceMessage),
+                () -> assertTrue(aliceMessage.contains("I love the weather today")),
+                () -> assertTrue(aliceMessage.contains("4 seconds ago"))
+        );
     }
 
     @Test
     @DisplayName("Posting and reading messages in chronological order")
-    void shouldReturnedListOfMessages() {
-        postBobMessages();
+    void shouldReturnListOfMessages() throws Exception {
+        controller.executeInstruction("Bob -> Damn! We lost!");
+        Thread.sleep(4000);
+        controller.executeInstruction("Bob -> Good game though.");
 
-        Map<LocalDateTime, ContentWrapper> messages = controller.getUserMessages("Bob");
-        Object[] messagesArray = messages.values().toArray();
-
-        assertNotNull(messages);
-        assertEquals(2, messages.size());
-        assertEquals(2, messagesArray.length);
-
-        ContentWrapper wrapper = (ContentWrapper) messagesArray[0];
-        assertEquals("Good game though.", wrapper.getContent());
-
-        wrapper = (ContentWrapper) messagesArray[1];
-        assertEquals("Damn! We lost!", wrapper.getContent());
+        String[] messages = controller.executeInstruction("Bob").split("\\R");
+        assertAll("Get user's messages ordered from newest to oldest",
+                () -> assertTrue(messages[0].contains("Good game though.")),
+                () -> assertTrue(messages[0].contains("1 second ago")),
+                () -> assertTrue(messages[1].contains("Damn! We lost!")),
+                () -> assertTrue(messages[1].contains("seconds ago"))
+        );
     }
 
     @Test
     @DisplayName("Posting, following and displaying user wall")
-    void shouldReturnAggregatedListOfMessages() {
-        postAliceMessages();
-        postBobMessages();
-        postCharlieMessages();
+    void shouldReturnAggregatedListOfMessages() throws Exception {
+        controller.executeInstruction("Alice -> I love the weather today");
+        Thread.sleep(2000);
+        controller.executeInstruction("Bob -> Damn! We lost!");
+        controller.executeInstruction("Bob -> Good game though.");
+        Thread.sleep(2000);
+        controller.executeInstruction("Charlie -> I'm in New York today! Anyone want to have a coffee?");
 
-        controller.addFollowing("Charlie", "Alice", LocalDateTime.now());
-        Map<LocalDateTime, ContentWrapper> aggregatedMessages = controller.getAllMessages("Charlie");
-        Object[] wall = aggregatedMessages.values().toArray();
+        controller.executeInstruction("Charlie follows Alice");
+        String[] messages = controller.executeInstruction("Charlie wall").split("\\R");
+        assertAll("A user's aggregated messages should be ordered from newest to oldest",
+                () -> assertTrue(messages[0].contains("Charlie")),
+                () -> assertTrue(messages[0].contains("I'm in New York today! Anyone want to have a coffee?")),
+                () -> assertTrue(messages[1].contains("Alice")),
+                () -> assertTrue(messages[1].contains("I love the weather today"))
+        );
 
-        assertNotNull(aggregatedMessages);
-        assertEquals(2, aggregatedMessages.size());
-
-        ContentWrapper wrapper = (ContentWrapper) wall[0];
-        assertEquals("Charlie", wrapper.getOwner());
-        assertTrue(wrapper.getFormattedContent().contains("(2 seconds ago)"));
-
-        wrapper = (ContentWrapper) wall[1];
-        assertEquals("Alice", wrapper.getOwner());
-
-        controller.addFollowing("Charlie", "Bob", LocalDateTime.now());
-        aggregatedMessages = controller.getAllMessages("Charlie");
-        wall = aggregatedMessages.values().toArray();
-
-        assertEquals(4, aggregatedMessages.size());
-
-        wrapper = (ContentWrapper) wall[0];
-        assertEquals("Charlie", wrapper.getOwner());
-        assertTrue(wrapper.getFormattedContent().contains("(2 seconds ago)"));
-
-        wrapper = (ContentWrapper) wall[1];
-        assertEquals("Bob", wrapper.getOwner());
-        assertTrue(wrapper.getContent().contains("though."));
-
-        wrapper = (ContentWrapper) wall[2];
-        assertEquals("Bob", wrapper.getOwner());
-        assertTrue(wrapper.getContent().contains("We lost!"));
-
-        wrapper = (ContentWrapper) wall[3];
-        assertEquals("Alice", wrapper.getOwner());
-        assertTrue(wrapper.getFormattedContent().contains("(5 minutes ago)"));
-    }
-
-    /**
-     * Prepare and post Alice's messages
-     */
-    private void postAliceMessages() {
-        String user = "Alice";
-        LocalDateTime timestamp = LocalDateTime.now().minusMinutes(5);
-        String message = "I love the weather today";
-        controller.postMessage(user, message, timestamp);
-    }
-
-    /**
-     * Prepare and post Bob's messages
-     */
-    private void postBobMessages() {
-        String user = "Bob";
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime timestamp = now.minusMinutes(2);
-        String message = "Damn! We lost!";
-        controller.postMessage(user, message, timestamp);
-
-        timestamp = now.minusMinutes(1);
-        message = "Good game though.";
-        controller.postMessage(user, message, timestamp);
-    }
-
-    /**
-     * Prepare and post Charlie's messages
-     */
-    private void postCharlieMessages() {
-        String user = "Charlie";
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime timestamp = now.minusSeconds(2);
-        String message = "I'm in New York today! Anyone want to have a coffee?";
-        controller.postMessage(user, message, timestamp);
+        controller.executeInstruction("Charlie follows Bob");
+        String[] wall = controller.executeInstruction("Charlie wall").split("\\R");
+        assertAll("A user's aggregated messages should be ordered from newest to oldest",
+                () -> assertTrue(wall[0].contains("Charlie")),
+                () -> assertTrue(wall[0].contains("in New York today!")),
+                () -> assertTrue(wall[1].contains("Bob")),
+                () -> assertTrue(wall[1].contains("Good game though.")),
+                () -> assertTrue(wall[2].contains("Bob")),
+                () -> assertTrue(wall[2].contains("Damn! We lost!")),
+                () -> assertTrue(wall[3].contains("Alice")),
+                () -> assertTrue(wall[3].contains("I love the weather today"))
+        );
     }
 }
