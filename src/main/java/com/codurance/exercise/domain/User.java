@@ -1,7 +1,7 @@
 package com.codurance.exercise.domain;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * A class that represents a user in a social network
@@ -9,8 +9,8 @@ import java.util.List;
  */
 public class User {
     private String name;
-    private List<Content> contentList = new LinkedList<>();
     private List<Connection> connections = new LinkedList<>();
+    private Map<LocalDateTime, Content> contentMap = new TreeMap<>(Comparator.reverseOrder());
 
     /**
      * Constructor
@@ -42,8 +42,8 @@ public class User {
     public boolean addContent(Content content) {
         if (content == null)
             return false;
-
-        return contentList.add(content);
+        Content result = contentMap.put(content.getCreationDate(), content);
+        return result != null;
     }
 
     /**
@@ -59,11 +59,11 @@ public class User {
     }
 
     /**
-     * Return a list of all content from this user
-     * @return content list
+     * Return a map of all content from this user
+     * @return content map
      */
-    public List<Content> getAllContent() {
-        return new LinkedList<>(contentList);
+    public Map<LocalDateTime, Content> getAllContent() {
+        return new HashMap<>(contentMap);
     }
 
     /**
@@ -83,7 +83,7 @@ public class User {
         final int prime = 31;
         int result = 1;
         result = prime * result + name.hashCode();
-        result = prime * result + contentList.hashCode();
+        result = prime * result + contentMap.hashCode();
         result = prime * result + connections.hashCode();
         return result;
     }
@@ -105,7 +105,7 @@ public class User {
 
         User other = (User) obj;
         return name.equals(other.name)
-                && contentList.equals(other.contentList)
+                && contentMap.equals(other.contentMap)
                 && connections.equals(other.connections);
     }
 
@@ -120,6 +120,6 @@ public class User {
      */
     @Override
     public String toString() {
-        return String.format("[User: %s]", name);
+        return String.format("%s", name);
     }
 }
