@@ -63,7 +63,9 @@ public class User {
      * @return content map
      */
     public Map<LocalDateTime, Content> getAllContent() {
-        return new HashMap<>(contentMap);
+        Map<LocalDateTime, Content> result = new TreeMap<>(Comparator.reverseOrder());
+        result.putAll(contentMap);
+        return result;
     }
 
     /**
