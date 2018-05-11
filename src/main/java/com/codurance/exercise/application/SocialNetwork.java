@@ -1,10 +1,6 @@
 package com.codurance.exercise.application;
 
-import com.codurance.exercise.wrapper.ContentWrapper;
-import com.codurance.exercise.wrapper.SubscriptionWrapper;
-
 import java.time.LocalDateTime;
-import java.util.Map;
 
 /**
  * API methods definition.
@@ -14,28 +10,32 @@ public interface SocialNetwork {
 
     /**
      * Create/post content
-     * @param content content information to be created
+     * @param username name of the user who posts the content
+     * @param content actual content to be posted
+     * @param timestamp date and time when the content is created
      */
-    void createContent(ContentWrapper content);
+    void createContent(String username, String content, LocalDateTime timestamp);
 
     /**
      * Create/add subscription (following)
+     * @param username name of the user who posts the content
      * @param subscription subscription information to be created
+     * @param timestamp date and time when the content is created
      */
-    void createSubscription(SubscriptionWrapper subscription);
+    void createSubscription(String username, String subscription, LocalDateTime timestamp);
 
     /**
-     * Get created content for a given user
-     * @param user specified user name
-     * @return the request list of content
+     * Get created content for a given user as a string
+     * @param username specified user name
+     * @return a string representing the list of content
      */
-    Map<LocalDateTime, ContentWrapper> getContent(String user);
+    String getContent(String username);
 
     /**
-     * Get an aggregated map of content from a given user
+     * Get an aggregated list of content from a given user as a string
      * and the users they are following (they subscribed to)
-     * @param user the specified user name
-     * @return the request map of aggregated content
+     * @param username the specified user name
+     * @return a string representing the list of aggregated content
      */
-    Map<LocalDateTime, ContentWrapper> getAllContent(String user);
+    String getAllContent(String username);
 }
