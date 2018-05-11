@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,21 +23,24 @@ class SocialNetworkImplTest {
     void shouldReturnCreatedContent() {
         postAliceContent();
 
-        Map<LocalDateTime, Content> aliceContent = network.getUserContent("Alice");
-        Object[] contentArray = aliceContent.values().toArray();
-        Content content = (Content) contentArray[0];
-
-        assertAll("Post and retrieve a message",
+        Set<Content> aliceContent = network.getUserContent("Alice");
+        assertAll("Post a message",
                 () -> assertNotNull(aliceContent),
                 () -> assertFalse(aliceContent.isEmpty()),
-                () -> assertEquals(1, aliceContent.size()),
+                () -> assertEquals(1, aliceContent.size())
+        );
+
+        Object[] contentArray = aliceContent.toArray();
+        Content content = (Content) contentArray[0];
+        assertAll("Retrieve a message",
+                () -> assertEquals(1, contentArray.length),
                 () -> assertEquals("I love the weather today", content.getContent())
         );
 
         postBobContent();
 
-        Map<LocalDateTime, Content> bobContent = network.getUserContent("Bob");
-        Object[] bobArray = bobContent.values().toArray();
+        Set<Content> bobContent = network.getUserContent("Bob");
+        Object[] bobArray = bobContent.toArray();
         assertAll("Posted messages should be retrieved in reverse order of creation",
                 () -> assertEquals(2, bobArray.length),
                 () -> assertEquals("Good game though.", ((Content) bobArray[0]).getContent()),
@@ -52,8 +55,8 @@ class SocialNetworkImplTest {
         postCharlieContent();
         createCharlieSubscriptionToAlice();
 
-        Map<LocalDateTime, Content> allContent = network.getUserAggregatedContent("Charlie");
-        Object[] contentArray = allContent.values().toArray();
+        Set<Content> allContent = network.getUserAggregatedContent("Charlie");
+        Object[] contentArray = allContent.toArray();
 
         assertAll("Create a subscription and display aggregate content list",
                 () -> assertNotNull(contentArray),
@@ -72,13 +75,13 @@ class SocialNetworkImplTest {
         createCharlieSubscriptionToAlice();
         createCharlieSubscriptionToBob();
 
-        Map<LocalDateTime, Content> allContent = network.getUserAggregatedContent("Charlie");
-        Object[] contentArray = allContent.values().toArray();
+        Set<Content> allContent = network.getUserAggregatedContent("Charlie");
+        Object[] contentArray = allContent.toArray();
 
         LocalDateTime timestamp = LocalDateTime.now();
-        for (Map.Entry<LocalDateTime, Content> set: allContent.entrySet()) {
-            assertTrue(set.getKey().isBefore(timestamp));
-            timestamp = set.getKey();
+        for (Content content: allContent) {
+            assertTrue(content.getCreationDate().isBefore(timestamp));
+            timestamp = content.getCreationDate();
         }
 
         assertAll("Aggregated content should be display in reverse order of creation",
