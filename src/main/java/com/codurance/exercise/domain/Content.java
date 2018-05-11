@@ -12,11 +12,11 @@ import java.util.ResourceBundle;
  * that is created and shared in a social network.
  * @author Solange U. Gasengayire
  */
-public abstract class Content {
+public abstract class Content implements Comparable {
     User owner;
     LocalDateTime creationDate;
     private ResourceBundle messageBundle =
-            ResourceBundle.getBundle("messages", Locale.getDefault());;
+            ResourceBundle.getBundle("messages", Locale.getDefault());
 
     /**
      * Return this content's owner/author
@@ -30,7 +30,7 @@ public abstract class Content {
      * Return date on which the content was created
      * @return creation date
      */
-    LocalDateTime getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
@@ -41,13 +41,30 @@ public abstract class Content {
     public abstract Object getContent();
 
     /**
+     * Compares this object with the specified object for order.  Returns a
+     * negative integer, zero, or a positive integer as this object is less
+     * than, equal to, or greater than the specified object.
+     * @param o the object to be compared.
+     * @return a negative integer, zero, or a positive integer as this object
+     * is less than, equal to, or greater than the specified object.
+     * @throws NullPointerException if the specified object is null
+     * @throws ClassCastException   if the specified object's type prevents it
+     *                              from being compared to this object.
+     */
+    @Override
+    public int compareTo(Object o) {
+        // Provide a reverse sort order based on content date of creation
+        Content other = (Content) o;
+        return other.getCreationDate().compareTo(creationDate);
+    }
+
+    /**
      * Returns a string representation of the object. In general, the
      * {@code toString} method returns a string that
      * "textually represents" this object. The result should
      * be a concise but informative representation that is easy for a
      * person to read.
      * It is recommended that all subclasses override this method.
-     *
      * @return a string representation of the object.
      */
     @Override
