@@ -3,6 +3,8 @@ package com.codurance.exercise.presentation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -53,6 +55,7 @@ class CommandLineControllerTest {
         controller.executeInstruction("Alice -> I love the weather today");
         Thread.sleep(2000);
         controller.executeInstruction("Bob -> Damn! We lost!");
+        Thread.sleep(2000);
         controller.executeInstruction("Bob -> Good game though.");
         Thread.sleep(2000);
         controller.executeInstruction("Charlie -> I'm in New York today! Anyone want to have a coffee?");

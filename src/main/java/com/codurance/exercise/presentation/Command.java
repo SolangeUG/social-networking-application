@@ -4,7 +4,7 @@ package com.codurance.exercise.presentation;
  * A class that represents a user command from the console
  * @author Solange U. Gasengayire
  */
-public class Command {
+class Command {
 
     /**
      * All possible operations associated
@@ -26,7 +26,7 @@ public class Command {
      * Constructor
      * @param command user command
      */
-    public Command(String command) {
+    Command(String command) {
        super();
        this.extractParameters(command);
     }
@@ -35,7 +35,7 @@ public class Command {
      * Return the operation associated with this command
      * @return operation
      */
-    public Operation getOperation() {
+    Operation getOperation() {
         return this.operation;
     }
 
@@ -44,7 +44,7 @@ public class Command {
      * It is either a user's name, or the 'QUIT' instruction
      * @return operator
      */
-    public String getOperator() {
+    String getOperator() {
         return this.operator;
     }
 
@@ -52,7 +52,7 @@ public class Command {
      * Return the operand associated with this command
      * @return operand
      */
-    public String getOperand() {
+    String getOperand() {
         return this.operand;
     }
 
@@ -86,16 +86,20 @@ public class Command {
         if (command.contains("wall")) {
             int ndx = command.indexOf("wall");
             operator = command.substring(0, ndx).trim();
+            operand = "";
             operation = Operation.WALL;
             return;
         }
 
         // exiting the application
         if ("QUIT".equals(command)) {
+            operator = "";
+            operand = "";
             operation = Operation.QUIT;
         } else {
             // displaying user wall
             operator = command.trim();
+            operand = "";
             operation = Operation.READ;
         }
     }
