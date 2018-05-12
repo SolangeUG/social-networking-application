@@ -69,7 +69,10 @@ public class SocialNetworkImpl implements SocialNetwork {
     @Override
     public String getContent(String username) {
         User user = users.get(username);
-        return getContentAsString(user.getAllContent(), false);
+        if (user != null) {
+            return getContentAsString(user.getAllContent(), false);
+        }
+        return "";
     }
 
     /**
@@ -91,7 +94,9 @@ public class SocialNetworkImpl implements SocialNetwork {
      */
     Set<Content> getUserContent(String username) {
         User user = users.get(username);
-        return user.getAllContent();
+        if (user != null)
+            return user.getAllContent();
+        return new TreeSet<>();
     }
 
     /**
