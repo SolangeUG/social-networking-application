@@ -65,7 +65,8 @@ their first message.
 ## Setup and Run Instructions
 
 - Download and unzip this `social-networking-application` project source code.
-- From a command line window, navigate to the (newly unzipped) project root folder, then run the `mvn clean install` command.
+- From a command line window, navigate to the (newly unzipped) project root folder, then run the `mvn clean install` command, 
+(make sure you have enough user permissions to install the application).
 - To launch the application, run `java -jar target/social-networking-application-1.0.0-SNAPSHOT.jar`.
 
 
